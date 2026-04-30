@@ -154,3 +154,22 @@ kubectl rollout undo deployment/aceest-fitness-deployment
 5. Verify the successful rollback:
    ```bash
    kubectl rollout status deployment/aceest-fitness-deployment
+
+
+## Screenshots:
+Web Interface:
+<img width="800" height="800" alt="Screenshot 2026-05-01 at 00 37 23" src="https://github.com/user-attachments/assets/73c85409-3cd2-4e62-bea3-97af87874b28" />
+
+Jenkins Pipeline:
+Console Log:
+<img width="800" height="800" alt="Screenshot 2026-05-01 at 01 05 47" src="https://github.com/user-attachments/assets/38ea7834-e1dc-4f6b-863b-0090b99d6f5c" />
+
+Full Console Log Text: [Jenkins-Succesful_pipelin.txt](https://github.com/user-attachments/files/27258860/Jenkins-Succesful_pipelin.txt)
+
+Running Locally Minikube:
+<img width="800" height="450" alt="Screenshot 2026-05-01 at 01 06 26" src="https://github.com/user-attachments/assets/251ab90b-605f-48ab-a8c5-e92510873aab" />
+
+Containers:
+<img width="800" height="800" alt="Screenshot 2026-05-01 at 01 06 37" src="https://github.com/user-attachments/assets/f3c159c1-5783-46be-9fcb-37899af0b2bb" />
+
+

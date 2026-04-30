@@ -32,33 +32,34 @@ pipeline {
         }
         
         stage('SonarQube Analysis') {
-            // 1. This grabs the tool you created in the Jenkins UI and saves its location
             environment {
                 SCANNER_HOME = tool 'sonar-scanner'
             }
             steps {
-                withSonarQubeEnv('SonarQube-Server') {
-                    // 2. We use the exact path to force Jenkins to run it
-                    sh "${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=aceest-fitness -Dsonar.sources=."
+                withCredentials([string(credentialsId: 'sonar-secret-token', variable: 'SONAR_TOKEN')]) {
+                    withSonarQubeEnv('SonarQube-Server') {
+                        sh "${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=aceest-fitness -Dsonar.sources=. -Dsonar.login=${SONAR_TOKEN}"
+                    }
                 }
             }
         }
         
         stage('Push to Docker Hub') {
             steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials-id') {
-                        dockerImage.push()
-                        dockerImage.push('latest')
-                    }
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials-id', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                    sh "echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin"
+                    sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
                 }
             }
         }
         
         stage('Deploy to Kubernetes') {
             steps {
-                sh 'sed -i "s/latest/${DOCKER_TAG}/g" k8s-deployment.yaml'
-                sh 'kubectl apply -f k8s-deployment.yaml'
+                
+                sh "sed -i '' 's/latest/${DOCKER_TAG}/g' k8s-deployment.yaml"
+                
+
+                sh "kubectl apply -f k8s-deployment.yaml"
             }
         }
     }

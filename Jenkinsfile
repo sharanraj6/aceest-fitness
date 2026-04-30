@@ -17,17 +17,16 @@ pipeline {
         
         stage('Test & Validation') {
             steps {
-                script {
-                    dockerImage.inside {
-                        sh 'mkdir -p reports' 
-                        sh 'pip install -r requirements.txt'
-                        sh 'pytest test_app.py --junitxml=reports/result.xml'
-                    }
-                }
+                // 1. Create the reports folder in the Jenkins workspace
+                sh 'mkdir -p reports'
+                
+                // 2. Run a temporary Docker container, mount the reports folder, and execute pytest
+                sh "docker run --rm -v ${env.WORKSPACE}/reports:/app/reports ${DOCKER_IMAGE}:${DOCKER_TAG} pytest test_app.py --junitxml=reports/result.xml"
             }
             post {
                 always {
-                    junit 'reports/*.xml' 
+                    // 3. Jenkins collects the XML file created by the container
+                    junit 'reports/*.xml'
                 }
             }
         }

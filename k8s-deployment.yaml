@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: aceest-fitness-deployment
-  labels:
-    app: aceest-fitness
 spec:
   replicas: 3
   strategy:
@@ -23,11 +21,11 @@ spec:
       - name: aceest-flask-app
         image: sharanraj67/aceest-fitness:latest
         ports:
-        - containerPort: 5000
+        - containerPort: 8080
         livenessProbe:
           httpGet:
             path: /health
-            port: 5000
+            port: 8080
           initialDelaySeconds: 10
           periodSeconds: 15
 ---
@@ -42,4 +40,4 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 5000
+      targetPort: 8080

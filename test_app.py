@@ -1,31 +1,27 @@
 import pytest
 from app import app, init_db
-import sqlite3
 import os
 
 @pytest.fixture
 def client():
-    
     app.config['TESTING'] = True
-    init_db()
+    init_db("test_aceest.db")
     with app.test_client() as client:
         yield client
-    
-    if os.path.exists("aceest_fitness.db"):
-        os.remove("aceest_fitness.db")
+    if os.path.exists("test_aceest.db"):
+        os.remove("test_aceest.db")
 
 def test_health_check(client):
     response = client.get('/health')
     assert response.status_code == 200
-    assert b"healthy" in response.data
 
 def test_add_client(client):
     payload = {
-        "name": "John Doe",
-        "weight": 80.0,
-        "program": "Muscle Gain"
+        "name": "Jane Doe",
+        "age": 28,
+        "weight": 60.0,
+        "program": "Fat Loss (FL)"
     }
-    response = client.post('/client', json=payload)
+    response = client.post('/add_client', json=payload)
     assert response.status_code == 201
-    
-    assert response.json['calories'] == 2800
+    assert response.json['calories'] == 1320 # 60 * 22

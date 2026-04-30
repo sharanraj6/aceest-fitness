@@ -20,7 +20,7 @@ Orchestration: Kubernetes (Minikube)
 CI/CD Automation: Jenkins  
 
 ## Repository Structure
-Plaintext
+<pre>
 aceest-fitness/
 ├── app.py                  # Core Flask application and database logic
 ├── templates/
@@ -31,7 +31,7 @@ aceest-fitness/
 ├── k8s-deployment.yaml     # Kubernetes manifests (Deployment & Service)
 ├── Jenkinsfile             # Declarative Jenkins CI/CD pipeline configuration
 └── README.md               # Project documentation
-
+</pre>
 ## Prerequisites
 Before running this project, ensure the following are installed and configured:
 

@@ -7,12 +7,6 @@ pipeline {
     }
     
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/sharanraj6/aceest-fitness.git'
-            }
-        }
-        
         stage('Build Docker Image') {
             steps {
                 script {
@@ -25,6 +19,7 @@ pipeline {
             steps {
                 script {
                     dockerImage.inside {
+                        sh 'mkdir -p reports' 
                         sh 'pip install -r requirements.txt'
                         sh 'pytest test_app.py --junitxml=reports/result.xml'
                     }
@@ -32,7 +27,7 @@ pipeline {
             }
             post {
                 always {
-                    junit 'reports/result.xml'
+                    junit 'reports/*.xml' 
                 }
             }
         }

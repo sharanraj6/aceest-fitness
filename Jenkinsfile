@@ -32,9 +32,14 @@ pipeline {
         }
         
         stage('SonarQube Analysis') {
+            // 1. This grabs the tool you created in the Jenkins UI and saves its location
+            environment {
+                SCANNER_HOME = tool 'sonar-scanner'
+            }
             steps {
                 withSonarQubeEnv('SonarQube-Server') {
-                    sh 'sonar-scanner -Dsonar.projectKey=aceest-fitness -Dsonar.sources=.'
+                    // 2. We use the exact path to force Jenkins to run it
+                    sh "${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=aceest-fitness -Dsonar.sources=."
                 }
             }
         }

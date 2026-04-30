@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git ' https://github.com/sharanraj6/aceest-fitness.git'
+                git 'https://github.com/sharanraj6/aceest-fitness.git'
             }
         }
         
